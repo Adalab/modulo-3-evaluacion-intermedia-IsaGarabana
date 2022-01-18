@@ -3,42 +3,65 @@ import "../styles/App.scss";
 import callToApi from "../services/api";
 
 const App = () => {
+	/* Constantes de estado*/
+
 	const [data, setData] = useState([]);
-	const [search, setSearch] = useState("");
 	const [newAdalaber, setNewAdalaber] = useState({
 		name: "",
 		counselor: "",
 		speciality: "",
 	});
+	const [search, setSearch] = useState("");
+	const [filterCounselor, setFilterCounselor] = useState("all");
 
-	const handleChangeSearch = (ev) => {
-		setSearch(ev.currentTarget.value);
-	};
+	/* Recogemos datos del API*/
 
-	const handleNewAdalaber = (ev) => {
-		setNewAdalaber({
-			...newAdalaber,
-			[ev.target.id]: ev.target.value,
-		});
-	};
-	const handleClick = (ev) => {
-		ev.preventDefault();
-		setData([...data, newAdalaber]);
-		setNewAdalaber({
-			name: "",
-			counselor: "",
-			speciality: "",
-			id: data.lenght,
-		});
-		console.log(data);
-	};
 	useEffect(() => {
 		callToApi().then((responseApi) => {
 			setData(responseApi);
 		});
 	}, []);
 
-	const adalaberData = data
+	/* Funciones manejadoras*/
+
+	const handleNewAdalaber = (ev) => {
+		setNewAdalaber({
+			...newAdalaber,
+			[ev.currentTarget.id]: ev.currentTarget.value,
+		});
+	};
+
+	const handleChangeSearch = (ev) => {
+		setSearch(ev.currentTarget.value);
+	};
+
+	const handleFilterCounselor = (ev) => {
+		setFilterCounselor(ev.currentTarget.value);
+	};
+
+	const handleClick = (ev) => {
+		ev.preventDefault();
+		newAdalaber.id = data.length;
+		setData([...data, newAdalaber]);
+		setNewAdalaber({
+			name: "",
+			counselor: "",
+			speciality: "",
+		});
+	};
+
+	/* Filtros por tutor, por nombre y render con map*/
+
+	const adalabersInHTML = data
+		.filter((filterAdalaber) => {
+			if (filterCounselor === "all") {
+				return true;
+			} else if (filterCounselor === filterAdalaber.counselor) {
+				return true;
+			} else {
+				return false;
+			}
+		})
 		.filter((filterAdalaber) =>
 			filterAdalaber.name.toLowerCase().includes(search.toLowerCase())
 		)
@@ -50,28 +73,18 @@ const App = () => {
 			</tr>
 		));
 
+	/* Retorno de la función App*/
+
 	return (
 		<div className="page">
-			{/* Adalabers list */}
-			<section>
-				<table>
-					<thead>
-						<tr>
-							<th>Nombre</th>
-							<th>Tutora</th>
-							<th>Especialidad</th>
-						</tr>
-					</thead>
+			{/* Añadir Adalabers */}
 
-					<tbody>{adalaberData}</tbody>
-				</table>
-			</section>
-			{/* Add new Adalaber */}
-			<section>
-				<form className="form">
+			<header className="header">
+				<form className="addAdalaber__form">
 					<h2 className="title">Añade otra Adalaber</h2>
 					<label htmlFor="name">Nombre</label>
 					<input
+						className="addAdalaber__form--input"
 						type="text"
 						name="name"
 						id="name"
@@ -81,6 +94,7 @@ const App = () => {
 					/>
 					<label htmlFor="counselor">Tutora</label>
 					<input
+						className="addAdalaber__form--input"
 						type="text"
 						name="counselor"
 						id="counselor"
@@ -90,6 +104,7 @@ const App = () => {
 					/>
 					<label htmlFor="speciality">Especialidad</label>
 					<input
+						className="addAdalaber__form--input"
 						type="text"
 						name="speciality"
 						id="speciality"
@@ -98,20 +113,53 @@ const App = () => {
 						value={newAdalaber.speciality}
 					/>
 
-					<input type="submit" value="Añadir" onClick={handleClick} />
+					<button onClick={handleClick}> Añadir nueva </button>
 				</form>
-				{/* Add new Adalaber */}
+
 				<form>
 					<h2 className="title">Filtrar Adalabers</h2>
-					<input
-						autoComplete="off"
-						type="search"
-						name="search"
-						placeholder="Filtra Adalabers por nombre"
-						onChange={handleChangeSearch}
-						value={search}
-					/>
+					<label htmlFor="counselor">
+						Escoge una tutora:
+						<select
+							onChange={handleFilterCounselor}
+							value={filterCounselor}
+							name="counselor"
+							id="counselor"
+						>
+							<option value="all">Todos</option>
+							<option value="Yanelis">Yanelis</option>
+							<option value="Dayana">Dayana</option>
+							<option value="Iván">Iván</option>
+						</select>
+					</label>
+					<label htmlFor="search">
+						<input
+							autoComplete="off"
+							type="search"
+							name="search"
+							id="search"
+							placeholder="Introduce un nombre"
+							onChange={handleChangeSearch}
+							value={search}
+						/>
+						Filtrar por nombre
+					</label>
 				</form>
+			</header>
+			{/* Adalabers list */}
+			<section className="listAdalaber">
+				<h2>Listado de Adalabers</h2>
+				<table>
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tutora</th>
+							<th>Especialidad</th>
+						</tr>
+					</thead>
+
+					<tbody>{adalabersInHTML}</tbody>
+				</table>
 			</section>
 		</div>
 	);

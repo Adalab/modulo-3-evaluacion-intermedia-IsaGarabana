@@ -1,9 +1,26 @@
 // Mis estilos
-
+body {
+	background-color: rgb(134, 169, 186);
+}
 .page {
 	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .title {
 	font-size: 20px;
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+}
+
+.addAdalaber {
+	&__form {
+		&--input {
+			margin: 5px;
+		}
+	}
 }
