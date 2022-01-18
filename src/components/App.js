@@ -4,7 +4,6 @@ import callToApi from "../services/api";
 
 const App = () => {
 	const [data, setData] = useState([]);
-
 	const [name, setName] = useState("");
 	const [counselor, setCounselor] = useState("");
 	const [speciality, setSpeciality] = useState("");
@@ -38,13 +37,18 @@ const App = () => {
 		});
 	}, []);
 
-	const adalaberData = data.map((oneAdalaber) => (
-		<tr key={oneAdalaber.id}>
-			<td>{oneAdalaber.name} </td>
-			<td>{oneAdalaber.counselor}</td>
-			<td>{oneAdalaber.speciality}</td>
-		</tr>
-	));
+	const adalaberData = data
+		.filter((filterAdalaber) =>
+			filterAdalaber.name.toLowerCase().includes(search.toLowerCase())
+		)
+		.map((filterAdalaber) => (
+			<tr key={filterAdalaber.id}>
+				<td>{filterAdalaber.name} </td>
+				<td>{filterAdalaber.counselor}</td>
+				<td>{filterAdalaber.speciality}</td>
+			</tr>
+		));
+
 	return (
 		<div className="page">
 			{/* Adalabers list */}
