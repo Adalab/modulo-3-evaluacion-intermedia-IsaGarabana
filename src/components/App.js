@@ -53,15 +53,11 @@ const App = () => {
 	/* Filtros por tutor, por nombre y render con map*/
 
 	const adalabersInHTML = data
-		.filter((filterAdalaber) => {
-			if (filterCounselor === "all") {
-				return true;
-			} else if (filterCounselor === filterAdalaber.counselor) {
-				return true;
-			} else {
-				return false;
-			}
-		})
+		.filter(
+			(filterAdalaber) =>
+				filterCounselor === "all" || filterCounselor === filterAdalaber.counselor
+		)
+
 		.filter((filterAdalaber) =>
 			filterAdalaber.name.toLowerCase().includes(search.toLowerCase())
 		)
@@ -126,7 +122,7 @@ const App = () => {
 							name="counselor"
 							id="counselor"
 						>
-							<option value="all">Todos</option>
+							<option value="all">Cualquiera</option>
 							<option value="Yanelis">Yanelis</option>
 							<option value="Dayana">Dayana</option>
 							<option value="Iván">Iván</option>
