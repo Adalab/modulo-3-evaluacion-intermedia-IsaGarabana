@@ -5,36 +5,32 @@ import callToApi from "../services/api";
 const App = () => {
 	const [data, setData] = useState([]);
 	const [search, setSearch] = useState("");
+
+	const [newAdalaber, setNewAdalaber] = useState({
+		name: "",
+		counselor: "",
+		speciality: "",
+	});
+
+	const handleNewAdalaber = (ev) => {
+		setNewAdalaber({
+			...newAdalaber,
+			[ev.currentTarget.id]: ev.currenTarget.value,
+		});
+	};
 	const handleChangeSearch = (ev) => {
 		setSearch(ev.currentTarget.value);
-	};
-	const [name, setName] = useState("");
-	const [counselor, setCounselor] = useState("");
-	const [speciality, setSpeciality] = useState("");
-
-	const handleChangeName = (ev) => {
-		setName(ev.currentTarget.value);
-	};
-	const handleChangeCounselor = (ev) => {
-		setCounselor(ev.currentTarget.value);
-	};
-	const handleChangeSpeciality = (ev) => {
-		setSpeciality(ev.currentTarget.value);
 	};
 
 	const handleClick = (ev) => {
 		ev.preventDefault();
-		const newAdalaber = {
-			name: name,
-			counselor: counselor,
-			speciality: speciality,
-		};
 		setData([...data, newAdalaber]);
-		setName("");
-		setCounselor("");
-		setSpeciality("");
+		setNewAdalaber({
+			name: "",
+			counselor: "",
+			speciality: "",
+		});
 	};
-
 	useEffect(() => {
 		callToApi().then((responseApi) => {
 			setData(responseApi);
@@ -78,24 +74,24 @@ const App = () => {
 						name="name"
 						id="name"
 						placeholder="Nombre"
-						onChange={handleChangeName}
-						value={name}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.name}
 					/>
 					<input
 						type="text"
-						name="tutora"
-						id="tutora"
+						name="counselor"
+						id="counselor"
 						placeholder="Tutora"
-						onChange={handleChangeCounselor}
-						value={counselor}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.counselor}
 					/>
 					<input
 						type="text"
-						name="especialidad"
-						id="especialidad"
+						name="speciality"
+						id="speciality"
 						placeholder="Especialidad"
-						onChange={handleChangeSpeciality}
-						value={speciality}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.speciality}
 					/>
 
 					<input type="submit" value="Añadir" onClick={handleClick} />
