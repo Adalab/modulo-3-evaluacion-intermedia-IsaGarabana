@@ -5,23 +5,22 @@ import callToApi from "../services/api";
 const App = () => {
 	const [data, setData] = useState([]);
 	const [search, setSearch] = useState("");
-
 	const [newAdalaber, setNewAdalaber] = useState({
 		name: "",
 		counselor: "",
 		speciality: "",
 	});
 
-	const handleNewAdalaber = (ev) => {
-		setNewAdalaber({
-			...newAdalaber,
-			[ev.currentTarget.id]: ev.currenTarget.value,
-		});
-	};
 	const handleChangeSearch = (ev) => {
 		setSearch(ev.currentTarget.value);
 	};
 
+	const handleNewAdalaber = (ev) => {
+		setNewAdalaber({
+			...newAdalaber,
+			[ev.target.id]: ev.target.value,
+		});
+	};
 	const handleClick = (ev) => {
 		ev.preventDefault();
 		setData([...data, newAdalaber]);
@@ -29,7 +28,9 @@ const App = () => {
 			name: "",
 			counselor: "",
 			speciality: "",
+			id: data.lenght,
 		});
+		console.log(data);
 	};
 	useEffect(() => {
 		callToApi().then((responseApi) => {
@@ -69,6 +70,7 @@ const App = () => {
 			<section>
 				<form className="form">
 					<h2 className="title">Añade otra Adalaber</h2>
+					<label htmlFor="name">Nombre</label>
 					<input
 						type="text"
 						name="name"
@@ -77,6 +79,7 @@ const App = () => {
 						onChange={handleNewAdalaber}
 						value={newAdalaber.name}
 					/>
+					<label htmlFor="counselor">Tutora</label>
 					<input
 						type="text"
 						name="counselor"
@@ -85,6 +88,7 @@ const App = () => {
 						onChange={handleNewAdalaber}
 						value={newAdalaber.counselor}
 					/>
+					<label htmlFor="speciality">Especialidad</label>
 					<input
 						type="text"
 						name="speciality"
