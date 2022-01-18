@@ -5,9 +5,6 @@ import callToApi from "../services/api";
 const App = () => {
 	const [data, setData] = useState([]);
 	const [search, setSearch] = useState("");
-	// const [name, setName] = useState("");
-	// const [counselor, setCounselor] = useState("");
-	// const [speciality, setSpeciality] = useState("");
 
 	const [newAdalaber, setNewAdalaber] = useState({
 		name: "",
@@ -24,15 +21,6 @@ const App = () => {
 	const handleChangeSearch = (ev) => {
 		setSearch(ev.currentTarget.value);
 	};
-	// const handleChangeName = (ev) => {
-	// 	setName(ev.currentTarget.value);
-	// };
-	// const handleChangeCounselor = (ev) => {
-	// 	setCounselor(ev.currentTarget.value);
-	// };
-	// const handleChangeSpeciality = (ev) => {
-	// 	setSpeciality(ev.currentTarget.value);
-	// };
 
 	const handleClick = (ev) => {
 		ev.preventDefault();
@@ -109,7 +97,7 @@ const App = () => {
 					<input type="submit" value="Añadir" onClick={handleClick} />
 				</form>
 			</section>
-
+			{/* Filter Adalabers */}
 			<form>
 				<h2 className="title">Filtrar Adalabers</h2>
 				<input
