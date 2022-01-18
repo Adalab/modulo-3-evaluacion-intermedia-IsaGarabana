@@ -4,47 +4,63 @@ import callToApi from "../services/api";
 
 const App = () => {
 	const [data, setData] = useState([]);
+	const [search, setSearch] = useState("");
+	// const [name, setName] = useState("");
+	// const [counselor, setCounselor] = useState("");
+	// const [speciality, setSpeciality] = useState("");
 
-	const [name, setName] = useState("");
-	const [counselor, setCounselor] = useState("");
-	const [speciality, setSpeciality] = useState("");
+	const [newAdalaber, setNewAdalaber] = useState({
+		name: "",
+		counselor: "",
+		speciality: "",
+	});
 
-	const handleChangeName = (ev) => {
-		setName(ev.currentTarget.value);
+	const handleNewAdalaber = (ev) => {
+		setNewAdalaber({
+			...newAdalaber,
+			[ev.currentTarget.id]: ev.currenTarget.value,
+		});
 	};
-	const handleChangeCounselor = (ev) => {
-		setCounselor(ev.currentTarget.value);
+	const handleChangeSearch = (ev) => {
+		setSearch(ev.currentTarget.value);
 	};
-	const handleChangeSpeciality = (ev) => {
-		setSpeciality(ev.currentTarget.value);
-	};
+	// const handleChangeName = (ev) => {
+	// 	setName(ev.currentTarget.value);
+	// };
+	// const handleChangeCounselor = (ev) => {
+	// 	setCounselor(ev.currentTarget.value);
+	// };
+	// const handleChangeSpeciality = (ev) => {
+	// 	setSpeciality(ev.currentTarget.value);
+	// };
 
 	const handleClick = (ev) => {
 		ev.preventDefault();
-		const newAdalaber = {
-			name: name,
-			counselor: counselor,
-			speciality: speciality,
-		};
 		setData([...data, newAdalaber]);
-		setName("");
-		setCounselor("");
-		setSpeciality("");
+		setNewAdalaber({
+			name: "",
+			counselor: "",
+			speciality: "",
+		});
 	};
-
 	useEffect(() => {
 		callToApi().then((responseApi) => {
 			setData(responseApi);
 		});
 	}, []);
 
-	const adalaberData = data.map((oneAdalaber) => (
-		<tr key={oneAdalaber.id}>
-			<td>{oneAdalaber.name} </td>
-			<td>{oneAdalaber.counselor}</td>
-			<td>{oneAdalaber.speciality}</td>
-		</tr>
-	));
+	const adalaberData = data
+		.filter((filterAdalaber) =>
+			filterAdalaber.name.toLowerCase().includes(search.toLowerCase())
+		)
+		.map((filterAdalaber) => (
+			<tr key={filterAdalaber.id}>
+				<td>{filterAdalaber.name} </td>
+				<td>{filterAdalaber.counselor}</td>
+				<td>{filterAdalaber.speciality}</td>
+			</tr>
+		));
+
 	return (
 		<div className="page">
 			{/* Adalabers list */}
@@ -70,29 +86,41 @@ const App = () => {
 						name="name"
 						id="name"
 						placeholder="Nombre"
-						onChange={handleChangeName}
-						value={name}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.name}
 					/>
 					<input
 						type="text"
-						name="tutora"
-						id="tutora"
+						name="counselor"
+						id="counselor"
 						placeholder="Tutora"
-						onChange={handleChangeCounselor}
-						value={counselor}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.counselor}
 					/>
 					<input
 						type="text"
-						name="especialidad"
-						id="especialidad"
+						name="speciality"
+						id="speciality"
 						placeholder="Especialidad"
-						onChange={handleChangeSpeciality}
-						value={speciality}
+						onChange={handleNewAdalaber}
+						value={newAdalaber.speciality}
 					/>
 
 					<input type="submit" value="Añadir" onClick={handleClick} />
 				</form>
 			</section>
+
+			<form>
+				<h2 className="title">Filtrar Adalabers</h2>
+				<input
+					autoComplete="off"
+					type="search"
+					name="search"
+					placeholder="Filtra Adalabers por nombre"
+					onChange={handleChangeSearch}
+					value={search}
+				/>
+			</form>
 		</div>
 	);
 };
