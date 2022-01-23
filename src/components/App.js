@@ -3,6 +3,7 @@ import "../styles/App.scss";
 import callToApi from "../services/api";
 
 const App = () => {
+	const getTitle = (text) => <h1>{text}</h1>;
 	/* Constantes de estado*/
 
 	const [data, setData] = useState([]);
@@ -76,8 +77,9 @@ const App = () => {
 			{/* Añadir Adalabers */}
 
 			<header className="header">
+				<div className="app">{getTitle("Adalabers")}</div>
 				<form className="addAdalaber__form">
-					<h2 className="title">Añade otra Adalaber</h2>
+					<h2 className="title">Añade una nueva Adalaber</h2>
 					<label htmlFor="name">Nombre</label>
 					<input
 						className="addAdalaber__form--input"
@@ -113,7 +115,7 @@ const App = () => {
 				</form>
 
 				<form>
-					<h2 className="title">Filtrar Adalabers</h2>
+					<h2 className="title">Filtra las Adalabers</h2>
 					<label htmlFor="counselor">
 						Escoge una tutora:
 						<select
